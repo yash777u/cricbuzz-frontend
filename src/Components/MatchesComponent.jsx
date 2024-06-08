@@ -1,4 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
+// Import Link from react-router-dom for navigation
+import { Link } from "react-router-dom"; // Added this line
 import {
   getAllMatches,
   getAllTeamScore,
@@ -59,7 +62,9 @@ const MatchesComponent = () => {
     <div className="container mt-5">
       <div className="flex flex-wrap -mx-2">
         {allMatches.map((match, index) => (
-          <div
+          // Wrapped the card content inside a Link component
+          <Link 
+            to={`/matches/${match.matchId}`} // Set the path to navigate on click
             key={index}
             className="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mb-4 mx-2 overflow-hidden transform transition-transform duration-300 hover:scale-105"
           >
@@ -118,7 +123,7 @@ const MatchesComponent = () => {
                 )}
               </span>
             </div>
-          </div>
+          </Link> // Closing the Link component
         ))}
       </div>
     </div>
