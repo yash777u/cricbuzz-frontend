@@ -1,0 +1,10 @@
+.footer {
+    background-color: #343a40; /* Dark background color */
+    color: white;             /* White text color */       /* Centered text */
+    padding: 1rem 0;          /* Padding for spacing */
+    position: absolute;       /* Absolute positioning */
+    bottom: 0;                /* Stick to the bottom */
+    width: 100%;              /* Full width */
+     text-align: center;
+  }
+  
