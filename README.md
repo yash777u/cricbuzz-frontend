@@ -1,4 +1,4 @@
-Table of Contents
+# Table of Contents
 
     Introduction
     Project Setup
@@ -9,6 +9,7 @@ Table of Contents
         Conditional Rendering
     Example Code
 ________________________________________________________________________________________________________________________________________________________________________________________
+# Run Locally on System
 To run your Cricbuzz frontend project locally after cloning it from GitHub, follow these short and simple steps:
 
 1. **Clone the repository**:
