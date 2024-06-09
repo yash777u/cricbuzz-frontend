@@ -10,6 +10,7 @@ export const getAllMatches = () => {
   return axios.get(REST_API_BASE_URL);
 };
 
+// Get Match By ID
 export const getMatchById = (id) => {
     return axios.get(`http://localhost:8080/api/matches/match/${id}`);
   };
@@ -29,12 +30,24 @@ export const getTeamsScoreByMatchId = (matchId) => {
     return axios.get(`${REST_API_TEAM_SCORE_URL}/${matchId}`);
 }
 
-//Get Teams Name by Team Id
+//Get ALl Teams Name
 export const getAllTeamsName = () => {
     return axios.get(`${REST_API_BASE_TEAM}`);
 }
 
+// Team Name By TeamID
+export const getTeamNameByID = async (teamId) => {
+    try {
+      const response = await axios.get(`${REST_API_BASE_TEAM}/${teamId}`);
+      return response; // Return the entire response object
+    } catch (error) {
+      console.error('Error fetching team name:', error);
+      throw error;
+    }
+};
 
+
+// Get Player Score By Match Id
 export const getPlayerScoreByMatchId = (matchId) => {
     return axios.get(`${REST_API_BASE_Player_Score}/match/${matchId}`);
 }
