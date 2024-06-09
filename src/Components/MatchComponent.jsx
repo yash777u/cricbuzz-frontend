@@ -6,6 +6,7 @@ import {
   getPlayerScoreByMatchId,
   getTeamNameByID,
   getTeamsScoreByMatchId,
+  getPlayerNameById,
 } from "../service/ServiceRepo";
 
 const MatchComponent = () => {
@@ -13,48 +14,68 @@ const MatchComponent = () => {
 
   const [matchDetail, setMatchDetail] = useState({});
   const [teamScores, setTeamScores] = useState([]);
-  const [playersScores, setPlayersScores] = useState([]);
   const [teamsName, setTeamsName] = useState({});
+  const [teamAScore, setTeamAScore] = useState([]);
+  const [teamBScore, setTeamBScore] = useState([]);
+  const [playerNames, setPlayerNames] = useState({});
 
   useEffect(() => {
     // Fetch match details, team scores, and player scores in parallel
     Promise.all([
-      getMatchById(matchId),
-      getTeamsScoreByMatchId(matchId),
-      getPlayerScoreByMatchId(matchId),
+        getMatchById(matchId),
+        getTeamsScoreByMatchId(matchId),
+        getPlayerScoreByMatchId(matchId),
     ])
-      .then(
+    .then(
         async ([matchResponse, teamScoresResponse, playersScoresResponse]) => {
-          const matchData = matchResponse.data;
-          const teamScoresData = teamScoresResponse.data;
-          const playerScoresData = playersScoresResponse.data;
+            const matchData = matchResponse.data;
+            const teamScoresData = teamScoresResponse.data;
+            const playerScoresData = playersScoresResponse.data;
 
-          setMatchDetail(matchData);
-          setTeamScores(teamScoresData);
-          setPlayersScores(playerScoresData);
+            setMatchDetail(matchData);
+            setTeamScores(teamScoresData);
 
-          console.log("Match Data:", matchData);
-          console.log("Teams Scores:", teamScoresData);
-          console.log("Player Scores:", playerScoresData);
+            // Fetch team names based on team scores
+            const teamNamesPromises = teamScoresData.map((teamScore) =>
+                getTeamNameByID(teamScore.teamId)
+            );
+            const teamNamesResponses = await Promise.all(teamNamesPromises);
+            const teamNames = {};
+            teamNamesResponses.forEach((response, index) => {
+                teamNames[teamScoresData[index].teamId] = response.data.teamName;
+            });
+            setTeamsName(teamNames);
 
-          // Fetch team names based on team scores
-          const teamNamesPromises = teamScoresData.map((teamScore) =>
-            getTeamNameByID(teamScore.teamId)
-          );
-          const teamNamesResponses = await Promise.all(teamNamesPromises);
-          const teamNames = {};
-          teamNamesResponses.forEach((response, index) => {
-            teamNames[teamScoresData[index].teamId] = response.data.teamName; // Access team name directly
-          });
-          setTeamsName(teamNames);
+            // Separate player scores into team-wise variables
+            const teamAScore = playerScoresData.filter(
+                (playerScore) => playerScore.teamId === teamScoresData[0].teamId
+            );
+            const teamBScore = playerScoresData.filter(
+                (playerScore) => playerScore.teamId === teamScoresData[1].teamId
+            );
+            setTeamAScore(teamAScore);
+            setTeamBScore(teamBScore);
 
-          console.log("Team Names:", teamNames);
+            // Fetch player names based on player scores
+            const playerIds = playerScoresData.map(
+                (playerScore) => playerScore.playerId
+            );
+            const playerNamesPromises = playerIds.map((playerId) =>
+                getPlayerNameById(playerId)
+            );
+            const playerNamesResponses = await Promise.all(playerNamesPromises);
+            const playerNames = {};
+            playerNamesResponses.forEach((playerName, index) => {
+                playerNames[playerIds[index]] = playerName;
+            });
+            setPlayerNames(playerNames);
         }
-      )
-      .catch((error) => {
+    )
+    .catch((error) => {
         console.error("Error fetching data:", error);
-      });
-  }, [matchId]);
+    });
+}, [matchId]);
+
 
   return (
     <div>
@@ -86,15 +107,20 @@ const MatchComponent = () => {
         </div>
       </section>
 
-      <div className="container">
-        <h2 className="text-4xl font-extrabold dark:text-white">
-          {teamsName[teamScores[0]?.teamId]} ({teamScores[0]?.score}/{teamScores[0]?.wicket})
-          Vs {teamsName[teamScores[1]?.teamId]} ({teamScores[1]?.score}/
-          {teamScores[1]?.wicket})
-        </h2>
+      <h2 className="text-4xl font-extrabold dark:text-white text-center">
+        {teamsName[teamScores[0]?.teamId]} ({teamScores[0]?.score}-
+        {teamScores[0]?.wicket}/{teamScores[0]?.overs}){" "}
+        <p className="text-sky-400 mt-2"> Vs </p>{" "}
+        {teamsName[teamScores[1]?.teamId]} ({teamScores[1]?.score}-
+        {teamScores[1]?.wicket}/{teamScores[1]?.overs})
+      </h2>
 
+      <div className="container mt-5">
+        <h4 className="text-2xl font-extrabold dark:text-white">
+          {teamsName[teamScores[0]?.teamId]}
+        </h4>
         <div className="relative overflow-x-auto">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-3">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-3 border-collapse border border-slate-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -118,7 +144,7 @@ const MatchComponent = () => {
               </tr>
             </thead>
             <tbody>
-              {playersScores.map((playerScore, index) => (
+              {teamAScore.map((playerScore, index) => (
                 <tr
                   key={index}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
@@ -127,7 +153,59 @@ const MatchComponent = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {playerScore.playerName}
+                    {playerNames[playerScore.playerId]}
+                  </th>
+                  <td className="px-6 py-4">{playerScore.runs}</td>
+                  <td className="px-6 py-4">{playerScore.balls}</td>
+                  <td className="px-6 py-4">{playerScore.fours}</td>
+                  <td className="px-6 py-4">{playerScore.sixes}</td>
+                  <td className="px-6 py-4">{playerScore.wickets}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="container mt-5">
+        <h4 className="text-2xl font-extrabold dark:text-white">
+          {teamsName[teamScores[1]?.teamId]}
+        </h4>
+        <div className="relative overflow-x-auto">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-3 border-collapse border border-slate-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Player Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Runs
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Balls
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  4's
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  6's
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Wickets
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {teamBScore.map((playerScore, index) => (
+                <tr
+                  key={index}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {playerNames[playerScore.playerId]}
                   </th>
                   <td className="px-6 py-4">{playerScore.runs}</td>
                   <td className="px-6 py-4">{playerScore.balls}</td>

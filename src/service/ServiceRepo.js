@@ -4,6 +4,13 @@ const REST_API_BASE_URL = "http://localhost:8080/api/matches";
 const REST_API_TEAM_SCORE_URL = "http://localhost:8080/api/team-score";
 const REST_API_BASE_TEAM = "http://localhost:8080/api/team";
 const REST_API_BASE_Player_Score = "http://localhost:8080/api/player-score";
+const REST_API_BASE_PLAYER = "http://localhost:8080/api/player";
+
+//Get Player Name by PlayerID
+export const getPlayerNameById = (playerId) => {
+    return axios.get(`${REST_API_BASE_PLAYER}/${playerId}`).then(response => response.data.playerName);
+}
+
 
 // Get All Matches
 export const getAllMatches = () => {
@@ -46,6 +53,11 @@ export const getTeamNameByID = async (teamId) => {
     }
 };
 
+
+// Get Player Score By TeamID and mAtch ID 
+export const getPlayerScoreByMatchIdTeamId=(matchId, teamId) => {
+    return axios.get(`${REST_API_BASE_Player_Score}/${matchId}/${teamId}`);
+}
 
 // Get Player Score By Match Id
 export const getPlayerScoreByMatchId = (matchId) => {

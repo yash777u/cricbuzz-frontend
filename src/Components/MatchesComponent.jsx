@@ -1,7 +1,5 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-// Import Link from react-router-dom for navigation
-import { Link } from "react-router-dom"; // Added this line
+import { Link } from "react-router-dom";
 import {
   getAllMatches,
   getAllTeamScore,
@@ -62,11 +60,11 @@ const MatchesComponent = () => {
     <div className="container mt-5">
       <div className="flex flex-wrap -mx-2">
         {allMatches.map((match, index) => (
-          // Wrapped the card content inside a Link component
-          <Link 
-            to={`/matches/${match.matchId}`} // Set the path to navigate on click
+          <Link
+            to={`/matches/${match.matchId}`}
             key={index}
-            className="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mb-4 mx-2 overflow-hidden transform transition-transform duration-300 hover:scale-105"
+            className="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mb-4 mx-2 overflow-hidden transform transition-transform duration-300 hover:scale-105 no-underline" // Added no-underline class here
+            style={{ textDecoration: "none" }} // Additional inline style to ensure no underline
           >
             <div className="flex justify-between items-center mb-2">
               <span
@@ -83,13 +81,14 @@ const MatchesComponent = () => {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {match.venue}
             </h5>
-            {/* Display team scores for the match */}
             {allTeamScore
               .filter((teamScore) => teamScore.matchId === match.matchId)
               .map((teamScore, index) => (
-                <div key={index} className="font-normal text-emerald-500 bg-slate-100 font-semibold">
+                <div
+                  key={index}
+                  className="font-normal text-emerald-500 bg-slate-100 font-semibold"
+                >
                   <p>
-                    {/* Display team name if available */}
                     {teamName[teamScore.teamId] && (
                       <span>{teamName[teamScore.teamId].teamName}: </span>
                     )}
@@ -123,7 +122,7 @@ const MatchesComponent = () => {
                 )}
               </span>
             </div>
-          </Link> // Closing the Link component
+          </Link>
         ))}
       </div>
     </div>

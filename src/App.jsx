@@ -19,7 +19,6 @@ const App = () => {
           {/* Use a dynamic path segment for match details */}
           <Route path="/matches/:matchId" element={<MatchComponent />} />
         </Routes>
-        <FooterComponent />
       </Router>
     </div>
   );
