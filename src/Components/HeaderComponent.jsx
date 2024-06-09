@@ -22,6 +22,10 @@ const HeaderComponent = () => {
     navigate("/players");
   }
 
+  function aboutMeRoutes(){
+    navigate("/about-me");
+  }
+
   return (
     <div>
       <Navbar isBordered isBlurred={false} className="bg-gray-900 text-white">
@@ -56,6 +60,11 @@ const HeaderComponent = () => {
           <NavbarItem>
             <Link color="foreground" href="#" className="text-white" onClick={playerStatsRoutes} >
               Players Stats
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="#" className="text-white" onClick={aboutMeRoutes} >
+              About Me
             </Link>
           </NavbarItem>
         </NavbarContent>

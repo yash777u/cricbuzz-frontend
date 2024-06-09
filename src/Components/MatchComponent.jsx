@@ -167,7 +167,7 @@ const MatchComponent = () => {
         </div>
       </div>
 
-      <div className="container mt-5">
+      <div className="container mt-5 mb-20">
         <h4 className="text-2xl font-extrabold dark:text-white">
           {teamsName[teamScores[1]?.teamId]}
         </h4>
