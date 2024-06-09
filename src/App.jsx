@@ -9,6 +9,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MatchComponent from "./Components/MatchComponent";
 import AllTeamsComponent from "./Components/AllTeamsComponent";
+import PlayerComponent from "./Components/PlayerComponent";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           {/* Use a dynamic path segment for match details */}
           <Route path="/matches/:matchId" element={<MatchComponent />} />
           <Route path="/all-teams" element={<AllTeamsComponent />} />
+          <Route path="/players" element={<PlayerComponent />} />
         </Routes>
       </Router>
     </div>

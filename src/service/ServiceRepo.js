@@ -11,6 +11,10 @@ export const getPlayerNameById = (playerId) => {
     return axios.get(`${REST_API_BASE_PLAYER}/${playerId}`).then(response => response.data.playerName);
 }
 
+// Get All Player Score
+export const getAllPlayerScore= () => {
+    return axios.get(REST_API_BASE_Player_Score);
+} 
 
 // Get All Matches
 export const getAllMatches = () => {
@@ -52,6 +56,11 @@ export const getTeamNameByID = async (teamId) => {
       throw error;
     }
 };
+
+//Get All Players Name 
+export const getAllPlayersName= () => {
+    return axios.get(REST_API_BASE_PLAYER);
+}
 
 
 // Get Player Score By TeamID and mAtch ID 

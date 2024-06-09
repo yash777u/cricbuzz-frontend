@@ -18,11 +18,15 @@ const HeaderComponent = () => {
     navigate("/all-teams");
   }
 
+  function playerStatsRoutes(){
+    navigate("/players");
+  }
+
   return (
     <div>
       <Navbar isBordered isBlurred={false} className="bg-gray-900 text-white">
         <NavbarContent className="hidden sm:flex gap-7" justify="center">
-          <NavbarItem>
+          <NavbarItem >
             <img
               src={cricbuzzLogo}
               alt="Cricbuzz Logo"
@@ -50,7 +54,7 @@ const HeaderComponent = () => {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="#" className="text-white">
+            <Link color="foreground" href="#" className="text-white" onClick={playerStatsRoutes} >
               Players Stats
             </Link>
           </NavbarItem>
