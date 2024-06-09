@@ -14,6 +14,10 @@ const HeaderComponent = () => {
     navigate("/");
   }
 
+  function allTeamsRoutes() {
+    navigate("/all-teams");
+  }
+
   return (
     <div>
       <Navbar isBordered isBlurred={false} className="bg-gray-900 text-white">
@@ -41,7 +45,7 @@ const HeaderComponent = () => {
           <NavbarItem>
             {" "}
             {/* Remove isActive from All Teams */}
-            <Link href="#" className="text-white">
+            <Link href="#" className="text-white" onClick={allTeamsRoutes} >
               All Teams
             </Link>
           </NavbarItem>
